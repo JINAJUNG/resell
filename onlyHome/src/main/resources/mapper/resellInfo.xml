@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SQL.resell">
+
+	<select id="selectResell" resultType="ri">
+		select * from resell
+		<where>
+			<if test="pronum != null"> pronum = #{pronum}</if>
+			<if test="procategory != null"> procategory like '%' || #{procategory} || '%'</if>
+			<if test="proname != null">proname like '%' ||  #{proname} || '%'</if>
+			<if test="inpay != null">inpay = #{inpay}</if>
+			<if test="outpay != null">outpay = #{outpay}</if>
+			<if test="prodesc != null">prodesc like '%' || #{prodesc} || '%'</if>
+		</where>
+	</select>
+
+	<insert id="insertResell" parameterType="ri">
+		insert into resell(pronum,procategory,proname,indate,inpay
+		<if test="outdate!=null">,outdate</if>
+		<if test="outpay!=null">,outpay</if>
+		<if test="prodesc!=null">,prodesc</if>
+		<if test="prophoto!=null">,prophoto</if>
+		)
+		values(seq_pronum.nextval,
+		#{procategory},#{proname}, to_char(sysdate,'yyyymmdd'),#{inpay}
+		<if test="outdate!=null">,#{outdate}</if>
+		<if test="outpay!=null">,#{outpay}</if>
+		<if test="prodesc!=null">,#{prodesc}</if>
+		<if test="prophoto!=null">,#{prophoto}</if>
+		)
+	</insert>
+
+	<update id="updateResell">
+		update resell
+		<set>
+			<if test="procategory != null"> procategory=#{procategory},</if>
+			<if test="proname != null">proname = #{proname},</if>
+			<if test="inpay != null">inpay = #{inpay},</if>
+			<if test="outdate != null">outdate = #{outdate},</if>
+			<if test="outpay != null">outpay = #{outpay},</if>
+			<if test="prodesc != null">prodesc = #{prodesc},</if>
+			<if test="prophoto != null">prophoto = #{prophoto}</if>
+		</set>
+		where pronum = #{pronum}
+	</update>
+
+	<delete id="deleteResell">
+		delete from resell where pronum=#{pronum}
+	</delete>
+
+</mapper>
